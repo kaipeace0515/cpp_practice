@@ -36,9 +36,14 @@ int main(void)
     // 提示：
     //   - sum 建議用 long long（成績總和理論上不會爆 int，但養成習慣）
     //   - count, pass_count, fail_count 用 int，初始值 0
-    //   - min_val, max_val 用 int，先不要急著給初始值，等 TODO 2 想想看要怎麼處理
+    //   - count, pass_count, fail_count 用 int，先不要急著給初始值，等 TODO 2 想想看要怎麼處理
     //     （第一筆資料進來之前，"目前最大值/最小值" 應該是多少？）
-
+    int sum=0;
+    int count=0;
+    int pass_count=0;
+    int fail_count=0;
+    int min=0;
+    int max=0;
 
     // ---- TODO 2: 用 scanf 迴圈讀取資料，直到 EOF 或非法輸入 ----
     // 提示：講義給的標準寫法是
@@ -51,7 +56,40 @@ int main(void)
     //       min_val 跟 max_val 都設成這筆值」來處理初始值問題）
     //   (d) 依 value >= 60 更新 pass_count 或 fail_count
     int value;
-
+    while (scanf("%d", &value) == 1)
+    {
+        if (value <= 100 && value >= 0)
+        {
+            sum += value;
+            count += 1;
+            if (count == 1)
+            {
+                max = value;
+                min = value;
+            }
+            if (value > max)
+            {
+                max = value;
+            }
+            if (value < min)
+            {
+                min = value;
+            }
+            if (value >= 60)
+            {
+                pass_count += 1;
+            }
+            else
+            {
+                fail_count += 1;
+            }
+        }
+        else
+        {
+            fprintf(stderr, "value out of range: %d\n", value);
+            return 1;
+        }
+    }
 
     // ---- TODO 3: 迴圈結束後，區分「正常 EOF」跟「輸入了非數字」 ----
     // 提示：講義的寫法：
@@ -59,11 +97,22 @@ int main(void)
     //       fprintf(stderr, "invalid token\n");
     //       return 1;
     //   }
-
+    if (!feof(stdin))
+    {
+        fprintf(stderr, "invalid token\n");
+        return 1;
+    }
 
     // ---- TODO 4: 處理「完全沒有輸入任何資料」的邊界情況 ----
     // 如果 count == 0，不能計算平均（會除以 0，是 undefined behavior！）
     // 印一行 "no data" 之類的訊息，然後 return 0 結束即可
+    if (count==0){
+
+        printf("no data");
+        return 1;
+
+    }
+
 
 
     // ---- TODO 5: 印出統計結果 ----
@@ -82,8 +131,8 @@ int main(void)
     //   min = 55
     //   max = 90
     //   pass = 4, fail = 1
-
-
+    double avg=(double)sum/count;
+    printf("count=%d\nsum=%d\naverage=%.2f\nmin=%d\nmax=%d\npass=%d,fail=%d",count,sum,avg,min,max,pass_count,fail_count);
     return 0;
 }
 
